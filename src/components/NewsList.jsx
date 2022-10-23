@@ -1,10 +1,31 @@
 import { Button, List, Skeleton, Space } from 'antd';
+import { StarOutlined } from '@ant-design/icons';
 import React, { useEffect, useState } from 'react';
 import { getNewStories } from '../utils/api.js';
-import { StarOutlined } from '@ant-design/icons';
+import { ReactComponent as HackerNewsLogo } from '../assets/logo.svg';
+import styled from 'styled-components';
 
-const count = 20;
-const fakeDataUrl = `https://randomuser.me/api/?results=${count}&inc=name,gender,email,nat,picture&noinfo`;
+const StyledItem = styled(List.Item)`
+  .ant-list-item-meta {
+    margin-bottom: 8px;
+  }
+  .ant-list-item-meta-title {
+    margin-bottom: 0;
+  }
+
+  .ant-list-item-meta-description {
+    color: red;
+    font-size: 12px;
+    word-break: break-all;
+  }
+  .ant-list-item-action {
+    margin-top: 0;
+  }
+  .ant-space-item {
+    font-size: 12px;
+  }
+`;
+let count = 100;
 
 const NewsList = () => {
   const [initLoading, setInitLoading] = useState(true);
@@ -13,10 +34,11 @@ const NewsList = () => {
   const [list, setList] = useState([]);
 
   useEffect(() => {
-    getNewStories().then((stories) => {
+    getNewStories(count).then((stories) => {
       setInitLoading(false);
       setData(stories);
       setList(stories);
+      count += 10;
       console.log(stories);
     });
   }, []);
@@ -68,20 +90,21 @@ const NewsList = () => {
   );
 
   const getDate = (timestamp) => {
-    return new Date(timestamp).toLocaleDateString();
+    return new Date(timestamp * 1000).toLocaleDateString();
   };
 
   return (
     <List
       bordered
-      header={<div>Hacker News</div>}
+      header={<h1>Hacker News</h1>}
+      size='small'
       className='demo-loadmore-list'
       loading={initLoading}
       itemLayout='vertical'
       loadMore={loadMore}
       dataSource={list}
       renderItem={(item) => (
-        <List.Item
+        <StyledItem
           key={item.id}
           actions={[
             <IconText
@@ -89,21 +112,23 @@ const NewsList = () => {
               text={item.score}
               key='list-vertical-star-o'
             />,
-            <div key='list-loadmore-edit'>{getDate(item.time)}</div>,
+            <div key='list-loadmore-edit' className='ant-space-item'>
+              {getDate(item.time)}
+            </div>,
           ]}
         >
-          <Skeleton avatar title={false} loading={item.loading} active>
-            <List.Item.Meta
-              title={item.title}
-              description={
-                <a href='{item.url}' target='_blank'>
-                  {item.url}
-                </a>
-              }
-            />
-            {/* <div>{item.score}</div> */}
-          </Skeleton>
-        </List.Item>
+          {/* <Skeleton avatar title={false} loading={item.loading} active> */}
+          <StyledItem.Meta
+            // add NavLink here
+            title={item.title}
+            description={
+              <a href={item.url} target='_blank'>
+                {item.url}
+              </a>
+            }
+          />
+          {/* </Skeleton> */}
+        </StyledItem>
       )}
     />
   );

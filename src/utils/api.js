@@ -1,7 +1,6 @@
 import axios from 'axios';
 
 const API_URL = import.meta.env.VITE_BASE_API_URL;
-let count = 10;
 
 const getStory = async (id) => {
   try {
@@ -12,7 +11,7 @@ const getStory = async (id) => {
   }
 };
 
-export const getNewStories = async () => {
+export const getNewStories = async (count) => {
   try {
     const storiesIds = await axios.get(
       `${API_URL}newstories.json?print=pretty`
@@ -20,7 +19,7 @@ export const getNewStories = async () => {
     const stories = await Promise.all(
       storiesIds.data.slice(0, count).map(getStory)
     );
-    count += 10;
+    console.log(count, 'count');
     return stories;
   } catch (e) {
     console.error(e);
