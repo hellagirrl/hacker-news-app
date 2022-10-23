@@ -1,12 +1,15 @@
 import { Avatar, Button, List, Skeleton } from 'antd';
 import React, { useEffect, useState } from 'react';
-const count = 3;
+import { getNewStories } from '../utils/api.js';
+const count = 20;
 const fakeDataUrl = `https://randomuser.me/api/?results=${count}&inc=name,gender,email,nat,picture&noinfo`;
+
 const NewsList = () => {
   const [initLoading, setInitLoading] = useState(true);
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
   const [list, setList] = useState([]);
+
   useEffect(() => {
     fetch(fakeDataUrl)
       .then((res) => res.json())
@@ -16,6 +19,7 @@ const NewsList = () => {
         setList(res.results);
       });
   }, []);
+
   const onLoadMore = () => {
     setLoading(true);
     setList(
@@ -40,6 +44,7 @@ const NewsList = () => {
         window.dispatchEvent(new Event('resize'));
       });
   };
+
   const loadMore =
     !initLoading && !loading ? (
       <div
@@ -53,6 +58,7 @@ const NewsList = () => {
         <Button onClick={onLoadMore}>loading more</Button>
       </div>
     ) : null;
+
   return (
     <List
       className='demo-loadmore-list'
