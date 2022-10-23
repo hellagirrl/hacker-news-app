@@ -1,13 +1,14 @@
 import axios from 'axios';
 
 const API_URL = import.meta.env.VITE_BASE_API_URL;
+let count = 10;
 
 const getStory = async (id) => {
   try {
     const story = await axios.get(`${API_URL}/item/${id}.json`);
-    return story;
+    return story.data;
   } catch (error) {
-    console.log('Error while getting a story.');
+    console.error(e);
   }
 };
 
@@ -16,9 +17,12 @@ export const getNewStories = async () => {
     const storiesIds = await axios.get(
       `${API_URL}newstories.json?print=pretty`
     );
-    const stories = await Promise.all(storiesIds.slice(0, 100).map(getStory));
+    const stories = await Promise.all(
+      storiesIds.data.slice(0, count).map(getStory)
+    );
+    count += 10;
     return stories;
   } catch (e) {
-    console.log('Error while getting stories.');
+    console.error(e);
   }
 };

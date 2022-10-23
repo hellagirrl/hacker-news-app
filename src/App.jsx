@@ -12,7 +12,7 @@ export default function App() {
   return (
     <div className='App'>
       <Layout>
-        <Header>Header</Header>
+        {/* <Header>Header</Header> */}
         <Content>
           {' '}
           <NewsList />

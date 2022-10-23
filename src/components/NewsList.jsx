@@ -1,6 +1,8 @@
-import { Avatar, Button, List, Skeleton } from 'antd';
+import { Button, List, Skeleton, Space } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { getNewStories } from '../utils/api.js';
+import { StarOutlined } from '@ant-design/icons';
+
 const count = 20;
 const fakeDataUrl = `https://randomuser.me/api/?results=${count}&inc=name,gender,email,nat,picture&noinfo`;
 
@@ -11,13 +13,12 @@ const NewsList = () => {
   const [list, setList] = useState([]);
 
   useEffect(() => {
-    fetch(fakeDataUrl)
-      .then((res) => res.json())
-      .then((res) => {
-        setInitLoading(false);
-        setData(res.results);
-        setList(res.results);
-      });
+    getNewStories().then((stories) => {
+      setInitLoading(false);
+      setData(stories);
+      setList(stories);
+      console.log(stories);
+    });
   }, []);
 
   const onLoadMore = () => {
@@ -59,27 +60,48 @@ const NewsList = () => {
       </div>
     ) : null;
 
+  const IconText = ({ icon, text }) => (
+    <Space>
+      {React.createElement(icon)}
+      {text}
+    </Space>
+  );
+
+  const getDate = (timestamp) => {
+    return new Date(timestamp).toLocaleDateString();
+  };
+
   return (
     <List
+      bordered
+      header={<div>Hacker News</div>}
       className='demo-loadmore-list'
       loading={initLoading}
-      itemLayout='horizontal'
+      itemLayout='vertical'
       loadMore={loadMore}
       dataSource={list}
       renderItem={(item) => (
         <List.Item
+          key={item.id}
           actions={[
-            <a key='list-loadmore-edit'>edit</a>,
-            <a key='list-loadmore-more'>more</a>,
+            <IconText
+              icon={StarOutlined}
+              text={item.score}
+              key='list-vertical-star-o'
+            />,
+            <div key='list-loadmore-edit'>{getDate(item.time)}</div>,
           ]}
         >
           <Skeleton avatar title={false} loading={item.loading} active>
             <List.Item.Meta
-              avatar={<Avatar src={item.picture.large} />}
-              title={<a href='https://ant.design'>{item.name?.last}</a>}
-              description='Ant Design, a design language for background applications, is refined by Ant UED Team'
+              title={item.title}
+              description={
+                <a href='{item.url}' target='_blank'>
+                  {item.url}
+                </a>
+              }
             />
-            <div>content</div>
+            {/* <div>{item.score}</div> */}
           </Skeleton>
         </List.Item>
       )}
