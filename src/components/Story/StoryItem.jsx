@@ -1,16 +1,16 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { showGoBack, showReload } from '@/store/newsSlice.js';
 import { useDispatch } from 'react-redux';
-import { getStory } from '../../utils/api';
+import { getStory } from '@/utils/api';
 import { useParams } from 'react-router';
-import { NewsListItem } from '../News/NewsListIem/NewsListItem';
+import NewsListItem from '../News/NewsListIem/NewsListItem';
 import { List } from 'antd';
 
 const NewItem = () => {
   const [data, setData] = useState({});
   const dispatch = useDispatch();
 
-  let { id } = useParams();
+  const { id } = useParams();
 
   useMemo(() => {
     getStory(id).then((story) => {
@@ -27,7 +27,7 @@ const NewItem = () => {
     };
   }, []);
   return (
-    <List itemLayout='vertical'>
+    <List bordered size='small' itemLayout='vertical'>
       <NewsListItem item={data} />
     </List>
   );

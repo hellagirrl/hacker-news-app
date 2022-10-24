@@ -1,8 +1,9 @@
 import { StyledListItem } from './NewsListItem.styled.js';
 import { Space } from 'antd';
-import React from 'react';
+import React, { memo } from 'react';
 import { StarOutlined } from '@ant-design/icons';
-import { getFormattedDate, getHostName } from '@/utils/dataManipulation.js';
+import { getFormattedDate } from '@/utils/getFormattedDate.js';
+import { getHostName } from '@/utils/getHostName.js';
 import { Link } from 'react-router-dom';
 
 const IconText = ({ icon, text }) => (
@@ -13,7 +14,6 @@ const IconText = ({ icon, text }) => (
 );
 
 const NewsListItem = (props) => {
-  // recursively load comments
   const showComments = () => {};
 
   return (
@@ -49,4 +49,4 @@ const NewsListItem = (props) => {
   );
 };
 
-export { NewsListItem };
+export default memo(NewsListItem);

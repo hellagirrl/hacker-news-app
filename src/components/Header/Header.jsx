@@ -1,7 +1,7 @@
 import { StyledHeader } from './Header.styled.js';
 import { ReactComponent as HackerNewsLogo } from '@/assets/logo.svg';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchNewStories, resetState } from '@/store/newsSlice.js';
+import { fetchNewStories, resetState, showReload } from '@/store/newsSlice.js';
 import { Link } from 'react-router-dom';
 
 export const CustomHeader = () => {
@@ -13,6 +13,7 @@ export const CustomHeader = () => {
   const handleReload = () => {
     dispatch(resetState());
     dispatch(fetchNewStories());
+    dispatch(showReload(true));
   };
 
   const GoBackButton = () => {

@@ -29,12 +29,6 @@ export const newsSlice = createSlice({
   name: 'news',
   initialState,
   reducers: {
-    finishInitLoading: (state) => {
-      state.initLoading = false;
-    },
-    setLoading: (state, payload) => {
-      state.loading = payload;
-    },
     showGoBack: (state, payload) => {
       state.onStoryView = payload;
     },
@@ -64,14 +58,6 @@ export const newsSlice = createSlice({
   },
 });
 
-// Action creators are generated for each case reducer function
-export const {
-  finishInitLoading,
-  setLoading,
-  loadNews,
-  resetState,
-  showGoBack,
-  showReload,
-} = newsSlice.actions;
+export const { showGoBack, showReload, resetState } = newsSlice.actions;
 
 export default newsSlice.reducer;
