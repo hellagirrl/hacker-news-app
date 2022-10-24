@@ -13,10 +13,10 @@ export default function App() {
         <CustomHeader />
         <Content>
           <Switch>
-            <Route exact path='/'>
+            <Route exact path='/hacker-news-app'>
               <NewsList />
             </Route>
-            <Route path='/:id'>
+            <Route path='/hacker-news-app/:id'>
               <NewItem />
             </Route>
           </Switch>
