@@ -1,43 +1,13 @@
 import { Divider, List, Space } from 'antd';
 import { StarOutlined } from '@ant-design/icons';
 import React, { useEffect } from 'react';
-import { Spin } from 'antd';
-import styled from 'styled-components';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import { getFormattedDate, getHostName } from '../utils/dataManipulation.js';
+import { getFormattedDate, getHostName } from '@/utils/dataManipulation.js';
 import { useSelector, useDispatch } from 'react-redux';
-import {
-  finishInitLoading,
-  fetchNewStories,
-  resetState,
-} from '../store/newsSlice.js';
+import { fetchNewStories, resetState } from '@/store/newsSlice.js';
 
-const StyledItem = styled(List.Item)`
-  .ant-list-item-meta {
-    margin-bottom: 0px;
-  }
-  .ant-list-item-meta-title {
-    margin-bottom: 0;
-    font-size: 14px;
-  }
+import { StyledListItem, StyledSpin } from './NewsList.styled.js';
 
-  .ant-list-item-meta-description {
-    font-size: 10px;
-    word-break: break-all;
-  }
-  .ant-list-item-action {
-    margin-top: 0;
-  }
-  .ant-space-item {
-    font-size: 12px;
-  }
-`;
-
-const StyledSpin = styled(Spin)`
-  .ant-spin-dot-item {
-    background-color: #434343;
-  }
-`;
 const NewsList = () => {
   // it's better not to destructure it bc of performance issues (rerender)
   const initLoading = useSelector((state) => state.initLoading);
@@ -96,7 +66,7 @@ const NewsList = () => {
         itemLayout='vertical'
         dataSource={news}
         renderItem={(item) => (
-          <StyledItem
+          <StyledListItem
             key={item.id}
             actions={[
               <IconText
@@ -109,7 +79,7 @@ const NewsList = () => {
               </div>,
             ]}
           >
-            <StyledItem.Meta
+            <StyledListItem.Meta
               // add NavLink here
               title={item.title}
               description={
@@ -118,7 +88,7 @@ const NewsList = () => {
                 </a>
               }
             />
-          </StyledItem>
+          </StyledListItem>
         )}
       />
     </InfiniteScroll>

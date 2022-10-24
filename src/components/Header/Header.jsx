@@ -1,5 +1,5 @@
 import { StyledHeader } from './Header.styled.js';
-import { ReactComponent as HackerNewsLogo } from '../../assets/logo.svg';
+import { ReactComponent as HackerNewsLogo } from '@/assets/logo.svg';
 
 export const CustomHeader = () => {
   const handleReload = () => {};
