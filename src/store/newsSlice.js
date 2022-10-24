@@ -55,6 +55,7 @@ export const newsSlice = createSlice({
         state.nextCount += 20;
 
         state.initLoading = false;
+        state.loading = false;
       })
       .addCase(fetchNewStories.rejected, (state, action) => {
         state.loading = false;

@@ -41,18 +41,13 @@ const StyledSpin = styled(Spin)`
 `;
 const NewsList = () => {
   // it's better not to destructure it bc of performance issues (rerender)
-  // const initLoading = useSelector((state) => state.initLoading);
-  // const loading = useSelector((state) => state.loading);
-
+  const initLoading = useSelector((state) => state.initLoading);
+  const loading = useSelector((state) => state.loading);
   const news = useSelector((state) => state.news.news);
 
   const dispatch = useDispatch();
 
-  const [initLoading, setInitLoading] = useState(true);
-  const [loading, setLoading] = useState(false);
-
   useEffect(() => {
-    setInitLoading(false);
     dispatch(fetchNewStories());
 
     const interval = setInterval(() => {
@@ -80,9 +75,7 @@ const NewsList = () => {
     if (loading) {
       return;
     }
-    setLoading(true);
     dispatch(fetchNewStories());
-    setLoading(false);
   };
 
   return (
