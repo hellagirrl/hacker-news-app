@@ -14,10 +14,8 @@ export const fetchNewStories = createAsyncThunk(
   'news/fetchNewStories',
   async (arg, { getState }) => {
     const state = getState().news;
-
     try {
       const data = await getNewStories(state.count, state.nextCount);
-
       return data;
     } catch (e) {
       console.error(e);

@@ -1,11 +1,10 @@
 import { Divider, List, Space } from 'antd';
-import { StarOutlined } from '@ant-design/icons';
 import React, { useEffect } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import { getFormattedDate, getHostName } from '@/utils/dataManipulation.js';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchNewStories, resetState } from '@/store/newsSlice.js';
-import { StyledListItem, StyledSpin } from './NewsList.styled.js';
+import { StyledSpin } from './NewsList.styled.js';
+import { NewsListItem } from '../NewsListIem/NewsListItem.jsx';
 
 const NewsList = () => {
   // it's better not to destructure it bc of performance issues (rerender)
@@ -24,14 +23,6 @@ const NewsList = () => {
     }, 60000);
     return () => clearInterval(interval);
   }, []);
-
-  const IconText = ({ icon, text }) => (
-    <Space>
-      {React.createElement(icon)}
-      {text}
-    </Space>
-  );
-
   const showLoader = () => {
     if (!initLoading && news.length) {
       return <Divider plain>Loading...</Divider>;
@@ -64,31 +55,7 @@ const NewsList = () => {
         className='demo-loadmore-list'
         itemLayout='vertical'
         dataSource={news}
-        renderItem={(item) => (
-          <StyledListItem
-            key={item.id}
-            actions={[
-              <IconText
-                icon={StarOutlined}
-                text={item.score}
-                key='list-vertical-star-o'
-              />,
-              <div className='ant-space-item'>
-                {getFormattedDate(item.time)}
-              </div>,
-            ]}
-          >
-            <StyledListItem.Meta
-              // add NavLink here
-              title={item.title}
-              description={
-                <a href={item.url} target='_blank'>
-                  {getHostName(item.url)}
-                </a>
-              }
-            />
-          </StyledListItem>
-        )}
+        renderItem={(item) => <NewsListItem item={item} key={item.id} />}
       />
     </InfiniteScroll>
   );

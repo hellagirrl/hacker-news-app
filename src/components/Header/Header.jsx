@@ -1,6 +1,6 @@
 import { StyledHeader } from './Header.styled.js';
 import { ReactComponent as HackerNewsLogo } from '@/assets/logo.svg';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { fetchNewStories, resetState } from '@/store/newsSlice.js';
 
 export const CustomHeader = () => {
