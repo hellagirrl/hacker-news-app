@@ -5,7 +5,6 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import { getFormattedDate, getHostName } from '@/utils/dataManipulation.js';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchNewStories, resetState } from '@/store/newsSlice.js';
-
 import { StyledListItem, StyledSpin } from './NewsList.styled.js';
 
 const NewsList = () => {

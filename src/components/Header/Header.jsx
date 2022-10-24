@@ -1,8 +1,15 @@
 import { StyledHeader } from './Header.styled.js';
 import { ReactComponent as HackerNewsLogo } from '@/assets/logo.svg';
+import { useSelector, useDispatch } from 'react-redux';
+import { fetchNewStories, resetState } from '@/store/newsSlice.js';
 
 export const CustomHeader = () => {
-  const handleReload = () => {};
+  const dispatch = useDispatch();
+
+  const handleReload = () => {
+    dispatch(resetState());
+    dispatch(fetchNewStories());
+  };
 
   return (
     <StyledHeader
