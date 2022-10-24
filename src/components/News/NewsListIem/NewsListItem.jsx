@@ -3,6 +3,7 @@ import { Space } from 'antd';
 import React from 'react';
 import { StarOutlined } from '@ant-design/icons';
 import { getFormattedDate, getHostName } from '@/utils/dataManipulation.js';
+import { Link } from 'react-router-dom';
 
 const IconText = ({ icon, text }) => (
   <Space>
@@ -27,8 +28,7 @@ const NewsListItem = (props) => {
       ]}
     >
       <StyledListItem.Meta
-        // add NavLink here
-        title={props.item.title}
+        title={<Link to={props.item.id.toString()}>{props.item.title}</Link>}
         description={
           <a href={props.item.url} target='_blank'>
             {getHostName(props.item.url)}

@@ -8,6 +8,9 @@ const StyledListItem = styled(List.Item)`
   .ant-list-item-meta-title {
     margin-bottom: 0;
     font-size: 14px;
+    a:hover {
+      color: #828282;
+    }
   }
 
   .ant-list-item-meta-description {
