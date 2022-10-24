@@ -92,6 +92,13 @@ const NewsList = () => {
     return null;
   };
 
+  const getHostName = (itemURL) => {
+    if (!itemURL) {
+      return null;
+    }
+    const url = new URL(itemURL);
+    return url.hostname;
+  };
   return (
     <InfiniteScroll
       dataLength={data.length}
@@ -127,7 +134,7 @@ const NewsList = () => {
               title={item.title}
               description={
                 <a href={item.url} target='_blank'>
-                  {item.url}
+                  {getHostName(item.url)}
                 </a>
               }
             />
