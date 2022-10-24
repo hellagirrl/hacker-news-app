@@ -25,8 +25,6 @@ export const fetchNewStories = createAsyncThunk(
   }
 );
 
-// export const fetchStoryById = createAsyncThunk('news/fetchStoryById')
-
 export const newsSlice = createSlice({
   name: 'news',
   initialState,

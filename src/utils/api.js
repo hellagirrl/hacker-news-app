@@ -11,6 +11,15 @@ export const getStory = async (id) => {
   }
 };
 
+export const getComment = async (id) => {
+  try {
+    const comment = await axios.get(`${API_URL}/item/${id}.json`);
+    return comment.data;
+  } catch (e) {
+    console.error(e);
+  }
+};
+
 export const getNewStories = async (startFrom, end) => {
   try {
     const storiesIds = await axios.get(
