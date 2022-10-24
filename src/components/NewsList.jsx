@@ -1,4 +1,4 @@
-import { Divider, List, Skeleton, Space } from 'antd';
+import { Divider, List, Space } from 'antd';
 import { StarOutlined } from '@ant-design/icons';
 import React, { useEffect, useState } from 'react';
 import { getNewStories } from '../utils/api.js';
@@ -6,6 +6,12 @@ import { Spin } from 'antd';
 import styled from 'styled-components';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { getFormattedDate, getHostName } from '../utils/dataManipulation.js';
+import { useSelector, useDispatch } from 'react-redux';
+import {
+  finishInitLoading,
+  fetchNewStories,
+  resetState,
+} from '../store/newsSlice.js';
 
 const StyledItem = styled(List.Item)`
   .ant-list-item-meta {
@@ -28,45 +34,30 @@ const StyledItem = styled(List.Item)`
   }
 `;
 
-let count = 0;
-
 const StyledSpin = styled(Spin)`
   .ant-spin-dot-item {
     background-color: #434343;
   }
 `;
 const NewsList = () => {
+  // it's better not to destructure it bc of performance issues (rerender)
+  // const initLoading = useSelector((state) => state.initLoading);
+  // const loading = useSelector((state) => state.loading);
+
+  const news = useSelector((state) => state.news.news);
+
+  const dispatch = useDispatch();
+
   const [initLoading, setInitLoading] = useState(true);
   const [loading, setLoading] = useState(false);
-  const [data, setData] = useState([]);
-
-  const loadMoreData = () => {
-    if (loading) {
-      return;
-    }
-    setLoading(true);
-
-    const nextCount = initLoading ? count + 100 : count + 20;
-
-    getNewStories(count, nextCount)
-      .then((stories) => {
-        setData([...data, ...stories]);
-        setLoading(false);
-        count = initLoading ? count + 100 : count + 20;
-      })
-      .catch((e) => {
-        console.error(e);
-        setLoading(false);
-      });
-  };
 
   useEffect(() => {
-    loadMoreData();
     setInitLoading(false);
+    dispatch(fetchNewStories());
 
     const interval = setInterval(() => {
-      count = 0;
-      loadMoreData();
+      dispatch(resetState());
+      dispatch(fetchNewStories());
     }, 60000);
     return () => clearInterval(interval);
   }, []);
@@ -79,16 +70,25 @@ const NewsList = () => {
   );
 
   const showLoader = () => {
-    if (!initLoading && data.length) {
+    if (!initLoading && news.length) {
       return <Divider plain>Loading...</Divider>;
     }
     return null;
   };
 
+  const nextLoad = () => {
+    if (loading) {
+      return;
+    }
+    setLoading(true);
+    dispatch(fetchNewStories());
+    setLoading(false);
+  };
+
   return (
     <InfiniteScroll
-      dataLength={data.length}
-      next={loadMoreData}
+      dataLength={news.length}
+      next={nextLoad}
       hasMore={true}
       loader={showLoader()}
       endMessage={<Divider plain>It is all, nothing more 🤐</Divider>}
@@ -102,7 +102,7 @@ const NewsList = () => {
         }}
         className='demo-loadmore-list'
         itemLayout='vertical'
-        dataSource={data}
+        dataSource={news}
         renderItem={(item) => (
           <StyledItem
             key={item.id}
