@@ -14,13 +14,14 @@ const initialState = {
 
 export const fetchNewStories = createAsyncThunk(
   'news/fetchNewStories',
-  async (arg, { getState }) => {
+  async (arg, { getState, dispatch }) => {
     const state = getState().news;
     try {
       const data = await getNewStories(state.count, state.nextCount);
       return data;
     } catch (e) {
       console.error(e);
+      dispatch(setError(e));
     }
   }
 );
@@ -34,6 +35,9 @@ export const newsSlice = createSlice({
     },
     showReload: (state, payload) => {
       state.onMainView = payload;
+    },
+    setError: (state, payload) => {
+      state.error = payload;
     },
     resetState: () => initialState,
   },
@@ -58,6 +62,7 @@ export const newsSlice = createSlice({
   },
 });
 
-export const { showGoBack, showReload, resetState } = newsSlice.actions;
+export const { showGoBack, showReload, resetState, setError } =
+  newsSlice.actions;
 
 export default newsSlice.reducer;

@@ -27,7 +27,6 @@ const NewsList = () => {
       dispatch(resetState());
       setData([]);
       dispatch(fetchNewStories()).then((stories) => {
-        console.log(stories);
         setData([...data, ...stories.payload]);
       });
       dispatch(showReload(true));
@@ -51,7 +50,6 @@ const NewsList = () => {
       return;
     }
     dispatch(fetchNewStories()).then((stories) => {
-      console.log(stories);
       setData([...data, ...stories.payload]);
     });
   };
