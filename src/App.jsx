@@ -6,17 +6,16 @@ import NewsList from './components/NewsList.jsx';
 import styled from 'styled-components';
 
 const { Content } = Layout;
+const StyledHeader = styled(PageHeader)`
+  .ant-page-header-heading-left {
+    margin: 0;
+  }
+  .ant-avatar-icon {
+    background: #ff6600;
+  }
+`;
 
 export default function App() {
-  const StyledHeader = styled(PageHeader)`
-    .ant-page-header-heading-left {
-      margin: 0;
-    }
-    .ant-avatar-icon {
-      background: #ff6600;
-    }
-  `;
-
   const handleReload = () => {};
   return (
     <div className='App'>
@@ -26,7 +25,11 @@ export default function App() {
           title='Hacker News'
           backIcon={false}
           extra={[
-            <div className='ant-header-menu-button' onClick={handleReload}>
+            <div
+              className='ant-header-menu-button'
+              key='1'
+              onClick={handleReload}
+            >
               reload
             </div>,
           ]}

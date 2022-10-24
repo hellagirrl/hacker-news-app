@@ -5,6 +5,7 @@ import { getNewStories } from '../utils/api.js';
 import { Spin } from 'antd';
 import styled from 'styled-components';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import { getFormattedDate, getHostName } from '../utils/dataManipulation.js';
 
 const StyledItem = styled(List.Item)`
   .ant-list-item-meta {
@@ -59,17 +60,13 @@ const NewsList = () => {
       });
   };
 
-  const renewDataOnce = () => {
-    count = 0;
-    loadMoreData();
-  };
-
   useEffect(() => {
     loadMoreData();
     setInitLoading(false);
 
     const interval = setInterval(() => {
-      renewDataOnce();
+      count = 0;
+      loadMoreData();
     }, 60000);
     return () => clearInterval(interval);
   }, []);
@@ -81,10 +78,6 @@ const NewsList = () => {
     </Space>
   );
 
-  const getDate = (timestamp) => {
-    return new Date(timestamp * 1000).toLocaleDateString();
-  };
-
   const showLoader = () => {
     if (!initLoading && data.length) {
       return <Divider plain>Loading...</Divider>;
@@ -92,13 +85,6 @@ const NewsList = () => {
     return null;
   };
 
-  const getHostName = (itemURL) => {
-    if (!itemURL) {
-      return null;
-    }
-    const url = new URL(itemURL);
-    return url.hostname;
-  };
   return (
     <InfiniteScroll
       dataLength={data.length}
@@ -126,7 +112,9 @@ const NewsList = () => {
                 text={item.score}
                 key='list-vertical-star-o'
               />,
-              <div className='ant-space-item'>{getDate(item.time)}</div>,
+              <div className='ant-space-item'>
+                {getFormattedDate(item.time)}
+              </div>,
             ]}
           >
             <StyledItem.Meta
