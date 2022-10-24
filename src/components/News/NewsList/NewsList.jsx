@@ -2,21 +2,21 @@ import { Divider, List, Space } from 'antd';
 import React, { useEffect } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchNewStories, resetState } from '@/store/newsSlice.js';
+import { fetchNewStories, resetState, showReload } from '@/store/newsSlice.js';
 import { StyledSpin } from './NewsList.styled.js';
 import { NewsListItem } from '../NewsListIem/NewsListItem.jsx';
 import uuid from 'react-uuid';
 
 const NewsList = () => {
-  // it's better not to destructure it bc of performance issues (rerender)
-  const initLoading = useSelector((state) => state.initLoading);
-  const loading = useSelector((state) => state.loading);
+  const initLoading = useSelector((state) => state.news.initLoading);
+  const loading = useSelector((state) => state.news.loading);
   const news = useSelector((state) => state.news.news);
 
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(fetchNewStories());
+    dispatch(showReload(true));
 
     const interval = setInterval(() => {
       dispatch(resetState());
@@ -24,6 +24,7 @@ const NewsList = () => {
     }, 60000);
     return () => clearInterval(interval);
   }, []);
+
   const showLoader = () => {
     if (!initLoading && news.length) {
       return <Divider plain>Loading...</Divider>;

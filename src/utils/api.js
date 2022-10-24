@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const API_URL = import.meta.env.VITE_BASE_API_URL;
 
-const getStory = async (id) => {
+export const getStory = async (id) => {
   try {
     const story = await axios.get(`${API_URL}/item/${id}.json`);
     return story.data;

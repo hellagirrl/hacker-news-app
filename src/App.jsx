@@ -2,7 +2,7 @@ import { Layout } from 'antd';
 import NewsList from './components/News/NewsList/NewsList.jsx';
 import { CustomHeader } from './components/Header/Header.jsx';
 import { Switch, Route } from 'react-router-dom';
-import NewItem from './components/New/NewItem.jsx';
+import NewItem from './components/Story/StoryItem.jsx';
 const { Content } = Layout;
 
 export default function App() {

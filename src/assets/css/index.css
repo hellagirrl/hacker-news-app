@@ -33,4 +33,9 @@ a:hover {
 .ant-header-menu-button {
   padding-right: 12px;
   cursor: pointer;
+  color: #000000;
+}
+
+.ant-header-menu-button a:hover {
+  color: #000000;
 }

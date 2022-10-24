@@ -8,7 +8,8 @@ const initialState = {
   error: null,
   count: 0,
   nextCount: 100,
-  isBack: false,
+  onStoryView: false,
+  onMainView: true,
 };
 
 export const fetchNewStories = createAsyncThunk(
@@ -24,6 +25,8 @@ export const fetchNewStories = createAsyncThunk(
   }
 );
 
+// export const fetchStoryById = createAsyncThunk('news/fetchStoryById')
+
 export const newsSlice = createSlice({
   name: 'news',
   initialState,
@@ -35,7 +38,10 @@ export const newsSlice = createSlice({
       state.loading = payload;
     },
     showGoBack: (state, payload) => {
-      state.isBack = payload;
+      state.onStoryView = payload;
+    },
+    showReload: (state, payload) => {
+      state.onMainView = payload;
     },
     resetState: () => initialState,
   },
@@ -67,6 +73,7 @@ export const {
   loadNews,
   resetState,
   showGoBack,
+  showReload,
 } = newsSlice.actions;
 
 export default newsSlice.reducer;

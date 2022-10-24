@@ -25,10 +25,11 @@ const NewsListItem = (props) => {
         <div className='ant-space-item'>
           {getFormattedDate(props.item.time)}
         </div>,
+        props.item.kids && <div>{props.item.kids?.length} comments</div>,
       ]}
     >
       <StyledListItem.Meta
-        title={<Link to={props.item.id.toString()}>{props.item.title}</Link>}
+        title={<Link to={props.item.id?.toString()}>{props.item.title}</Link>}
         description={
           <a href={props.item.url} target='_blank'>
             {getHostName(props.item.url)}
