@@ -59,9 +59,19 @@ const NewsList = () => {
       });
   };
 
+  const renewDataOnce = () => {
+    count = 0;
+    loadMoreData();
+  };
+
   useEffect(() => {
     loadMoreData();
     setInitLoading(false);
+
+    const interval = setInterval(() => {
+      renewDataOnce();
+    }, 60000);
+    return () => clearInterval(interval);
   }, []);
 
   const IconText = ({ icon, text }) => (
