@@ -1,21 +1,22 @@
-import { Button, List, Skeleton, Space } from 'antd';
+import { Divider, List, Skeleton, Space } from 'antd';
 import { StarOutlined } from '@ant-design/icons';
 import React, { useEffect, useState } from 'react';
 import { getNewStories } from '../utils/api.js';
-import { ReactComponent as HackerNewsLogo } from '../assets/logo.svg';
+import { Spin } from 'antd';
 import styled from 'styled-components';
+import InfiniteScroll from 'react-infinite-scroll-component';
 
 const StyledItem = styled(List.Item)`
   .ant-list-item-meta {
-    margin-bottom: 8px;
+    margin-bottom: 0px;
   }
   .ant-list-item-meta-title {
     margin-bottom: 0;
+    font-size: 14px;
   }
 
   .ant-list-item-meta-description {
-    color: red;
-    font-size: 12px;
+    font-size: 10px;
     word-break: break-all;
   }
   .ant-list-item-action {
@@ -25,62 +26,43 @@ const StyledItem = styled(List.Item)`
     font-size: 12px;
   }
 `;
-let count = 100;
 
+let count = 0;
+
+const StyledSpin = styled(Spin)`
+  .ant-spin-dot-item {
+    background-color: #434343;
+  }
+`;
 const NewsList = () => {
   const [initLoading, setInitLoading] = useState(true);
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
-  const [list, setList] = useState([]);
 
-  useEffect(() => {
-    getNewStories(count).then((stories) => {
-      setInitLoading(false);
-      setData(stories);
-      setList(stories);
-      count += 10;
-      console.log(stories);
-    });
-  }, []);
-
-  const onLoadMore = () => {
+  const loadMoreData = () => {
+    if (loading) {
+      return;
+    }
     setLoading(true);
-    setList(
-      data.concat(
-        [...new Array(count)].map(() => ({
-          loading: true,
-          name: {},
-          picture: {},
-        }))
-      )
-    );
-    fetch(fakeDataUrl)
-      .then((res) => res.json())
-      .then((res) => {
-        const newData = data.concat(res.results);
-        setData(newData);
-        setList(newData);
+
+    const nextCount = initLoading ? count + 100 : count + 20;
+
+    getNewStories(count, nextCount)
+      .then((stories) => {
+        setData([...data, ...stories]);
         setLoading(false);
-        // Resetting window's offsetTop so as to display react-virtualized demo underfloor.
-        // In real scene, you can using public method of react-virtualized:
-        // https://stackoverflow.com/questions/46700726/how-to-use-public-method-updateposition-of-react-virtualized
-        window.dispatchEvent(new Event('resize'));
+        count = initLoading ? count + 100 : count + 20;
+      })
+      .catch((e) => {
+        console.error(e);
+        setLoading(false);
       });
   };
 
-  const loadMore =
-    !initLoading && !loading ? (
-      <div
-        style={{
-          textAlign: 'center',
-          marginTop: 12,
-          height: 32,
-          lineHeight: '32px',
-        }}
-      >
-        <Button onClick={onLoadMore}>loading more</Button>
-      </div>
-    ) : null;
+  useEffect(() => {
+    loadMoreData();
+    setInitLoading(false);
+  }, []);
 
   const IconText = ({ icon, text }) => (
     <Space>
@@ -93,44 +75,56 @@ const NewsList = () => {
     return new Date(timestamp * 1000).toLocaleDateString();
   };
 
+  const showLoader = () => {
+    if (!initLoading && data.length) {
+      return <Divider plain>Loading...</Divider>;
+    }
+    return null;
+  };
+
   return (
-    <List
-      bordered
-      header={<h1>Hacker News</h1>}
-      size='small'
-      className='demo-loadmore-list'
-      loading={initLoading}
-      itemLayout='vertical'
-      loadMore={loadMore}
-      dataSource={list}
-      renderItem={(item) => (
-        <StyledItem
-          key={item.id}
-          actions={[
-            <IconText
-              icon={StarOutlined}
-              text={item.score}
-              key='list-vertical-star-o'
-            />,
-            <div key='list-loadmore-edit' className='ant-space-item'>
-              {getDate(item.time)}
-            </div>,
-          ]}
-        >
-          {/* <Skeleton avatar title={false} loading={item.loading} active> */}
-          <StyledItem.Meta
-            // add NavLink here
-            title={item.title}
-            description={
-              <a href={item.url} target='_blank'>
-                {item.url}
-              </a>
-            }
-          />
-          {/* </Skeleton> */}
-        </StyledItem>
-      )}
-    />
+    <InfiniteScroll
+      dataLength={data.length}
+      next={loadMoreData}
+      hasMore={true}
+      loader={showLoader()}
+      endMessage={<Divider plain>It is all, nothing more 🤐</Divider>}
+    >
+      <List
+        bordered
+        size='small'
+        loading={initLoading}
+        locale={{
+          emptyText: <StyledSpin />,
+        }}
+        className='demo-loadmore-list'
+        itemLayout='vertical'
+        dataSource={data}
+        renderItem={(item) => (
+          <StyledItem
+            key={item.id}
+            actions={[
+              <IconText
+                icon={StarOutlined}
+                text={item.score}
+                key='list-vertical-star-o'
+              />,
+              <div className='ant-space-item'>{getDate(item.time)}</div>,
+            ]}
+          >
+            <StyledItem.Meta
+              // add NavLink here
+              title={item.title}
+              description={
+                <a href={item.url} target='_blank'>
+                  {item.url}
+                </a>
+              }
+            />
+          </StyledItem>
+        )}
+      />
+    </InfiniteScroll>
   );
 };
 export default NewsList;

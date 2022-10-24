@@ -11,15 +11,14 @@ const getStory = async (id) => {
   }
 };
 
-export const getNewStories = async (count) => {
+export const getNewStories = async (startFrom, end) => {
   try {
     const storiesIds = await axios.get(
       `${API_URL}newstories.json?print=pretty`
     );
     const stories = await Promise.all(
-      storiesIds.data.slice(0, count).map(getStory)
+      storiesIds.data.slice(startFrom, end).map(getStory)
     );
-    console.log(count, 'count');
     return stories;
   } catch (e) {
     console.error(e);
