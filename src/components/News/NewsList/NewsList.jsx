@@ -5,8 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { fetchNewStories, resetState } from '@/store/newsSlice.js';
 import { StyledSpin } from './NewsList.styled.js';
 import { NewsListItem } from '../NewsListIem/NewsListItem.jsx';
-import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
-import NewItem from '../../New/NewItem.jsx';
+import uuid from 'react-uuid';
 
 const NewsList = () => {
   // it's better not to destructure it bc of performance issues (rerender)
@@ -57,13 +56,7 @@ const NewsList = () => {
         className='demo-loadmore-list'
         itemLayout='vertical'
         dataSource={news}
-        renderItem={(item) => (
-          // <Router>
-          //   <Link to={item.id}>
-          <NewsListItem item={item} key={item.id} />
-          //   </Link>
-          // </Router>
-        )}
+        renderItem={(item) => <NewsListItem item={item} key={uuid()} />}
       />
     </InfiniteScroll>
   );

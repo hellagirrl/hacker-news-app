@@ -8,6 +8,7 @@ const initialState = {
   error: null,
   count: 0,
   nextCount: 100,
+  isBack: false,
 };
 
 export const fetchNewStories = createAsyncThunk(
@@ -33,11 +34,8 @@ export const newsSlice = createSlice({
     setLoading: (state, payload) => {
       state.loading = payload;
     },
-    incrementCount: (state, payload) => {
-      state.count += payload;
-    },
-    incrementNextCount: (state, payload) => {
-      state.nextCount += payload;
+    showGoBack: (state, payload) => {
+      state.isBack = payload;
     },
     resetState: () => initialState,
   },
@@ -67,9 +65,8 @@ export const {
   finishInitLoading,
   setLoading,
   loadNews,
-  incrementCount,
-  incrementNextCount,
   resetState,
+  showGoBack,
 } = newsSlice.actions;
 
 export default newsSlice.reducer;

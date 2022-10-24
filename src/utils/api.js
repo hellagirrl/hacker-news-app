@@ -6,7 +6,7 @@ const getStory = async (id) => {
   try {
     const story = await axios.get(`${API_URL}/item/${id}.json`);
     return story.data;
-  } catch (error) {
+  } catch (e) {
     console.error(e);
   }
 };
