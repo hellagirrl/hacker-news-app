@@ -37,7 +37,9 @@ const NewsListItem = (props) => {
       <StyledListItem.Meta
         title={
           props.item.id && (
-            <Link to={props.item.id?.toString()}>{props.item.title}</Link>
+            <Link to={'/hacker-news-app/' + props.item.id?.toString()}>
+              {props.item.title}
+            </Link>
           )
         }
         description={
