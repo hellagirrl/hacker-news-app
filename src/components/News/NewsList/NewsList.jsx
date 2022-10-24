@@ -1,30 +1,46 @@
 import { Divider, List } from 'antd';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchNewStories, resetState, showReload } from '@/store/newsSlice.js';
 import { StyledSpin } from './NewsList.styled.js';
 import NewsListItem from '../NewsListIem/NewsListItem.jsx';
-import uuid from 'react-uuid';
 
 const NewsList = () => {
-  const { initLoading, loading, news } = useSelector((state) => state.news);
+  const { initLoading, loading } = useSelector((state) => state.news);
   const dispatch = useDispatch();
 
+  const [data, setData] = useState([]);
+
   useEffect(() => {
-    dispatch(fetchNewStories());
+    let ignore = false;
+
+    dispatch(fetchNewStories()).then((stories) => {
+      if (!ignore) {
+        setData([...data, ...stories.payload]);
+      }
+    });
+
     dispatch(showReload(true));
 
     const interval = setInterval(() => {
       dispatch(resetState());
-      dispatch(fetchNewStories());
+      setData([]);
+      dispatch(fetchNewStories()).then((stories) => {
+        console.log(stories);
+        setData([...data, ...stories.payload]);
+      });
       dispatch(showReload(true));
     }, 60000);
-    return () => clearInterval(interval);
+
+    return () => {
+      ignore = true;
+      clearInterval(interval);
+    };
   }, []);
 
   const showLoader = () => {
-    if (!initLoading && news.length) {
+    if (!initLoading && data.length) {
       return <Divider plain>Loading...</Divider>;
     }
     return null;
@@ -34,12 +50,15 @@ const NewsList = () => {
     if (loading) {
       return;
     }
-    dispatch(fetchNewStories());
+    dispatch(fetchNewStories()).then((stories) => {
+      console.log(stories);
+      setData([...data, ...stories.payload]);
+    });
   };
 
   return (
     <InfiniteScroll
-      dataLength={news.length}
+      dataLength={data.length}
       next={nextLoad}
       hasMore={true}
       loader={showLoader()}
@@ -54,8 +73,8 @@ const NewsList = () => {
         }}
         className='demo-loadmore-list'
         itemLayout='vertical'
-        dataSource={news}
-        renderItem={(item) => <NewsListItem item={item} key={uuid()} />}
+        dataSource={data}
+        renderItem={(item) => <NewsListItem item={item} key={item.id} />}
       />
     </InfiniteScroll>
   );

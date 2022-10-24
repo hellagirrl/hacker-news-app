@@ -4,7 +4,7 @@ import React, { memo } from 'react';
 import { StarOutlined } from '@ant-design/icons';
 import { getFormattedDate } from '@/utils/getFormattedDate.js';
 import { getHostName } from '@/utils/getHostName.js';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
 const IconText = ({ icon, text }) => (
   <Space>
@@ -14,6 +14,7 @@ const IconText = ({ icon, text }) => (
 );
 
 const NewsListItem = (props) => {
+  const { id } = useParams();
   const showComments = () => {};
 
   return (
@@ -28,7 +29,7 @@ const NewsListItem = (props) => {
         <div className='ant-space-item'>
           {getFormattedDate(props.item.time)}
         </div>,
-        props.item.kids && (
+        props.item.kids && id && (
           <div onClick={showComments}>{props.item.kids?.length} comments</div>
         ),
       ]}
