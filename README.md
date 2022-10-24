@@ -2,6 +2,8 @@
 
 A Hacker News Interface implemented with React, Redux Toolkit and React Router v5.
 
+[Live demo](https://hellagirrl.github.io/hacker-news-app/)
+
 ## Features
 
 - The main page displays recent 100 news (that's why it's taking that long to load...sorry)
